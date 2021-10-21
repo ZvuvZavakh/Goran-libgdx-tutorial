@@ -28,6 +28,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        player.update();
+
         GraphicsUtils.clearScreen();
         shapeRenderer.setProjectionMatrix(camera.combined);
 

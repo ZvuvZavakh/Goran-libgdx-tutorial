@@ -1,13 +1,16 @@
 package my.app.goran.tutorial.entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import my.app.goran.tutorial.utils.GraphicsUtils;
 
 public class Player {
 
-    private final static float BOUNDS_RADIUS = 0.4f;
-    private final static float SIZE = BOUNDS_RADIUS * 2;
+    private final float BOUNDS_RADIUS = 0.4f;
+    private final float SIZE = BOUNDS_RADIUS * 2;
+    private final float MAX_X_SPEED = 0.2f;
 
     private float x = 0f;
     private float y = 0f;
@@ -35,5 +38,18 @@ public class Player {
 
     private void updateBounds() {
         bounds.setPosition(x, y);
+    }
+
+    public void update() {
+        float xSpeed = 0f;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            xSpeed = MAX_X_SPEED;
+        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            xSpeed = -MAX_X_SPEED;
+        }
+
+        x += xSpeed;
+        updateBounds();
     }
 }
