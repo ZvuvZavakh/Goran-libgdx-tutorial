@@ -1,35 +1,19 @@
-package my.app.goran.tutorial.utils;
+package my.app.goran.tutorial.utils.debug;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class DebugCameraController {
 
-    private final static float MOVE_SPEED = 20f;
-    private final static int UP_KEY = Input.Keys.W;
-    private final static int DOWN_KEY = Input.Keys.S;
-    private final static int LEFT_KEY = Input.Keys.A;
-    private final static int RIGHT_KEY = Input.Keys.D;
-
-    private final static float DEFAULT_ZOOM = 1f;
-    private final static float ZOOM_SPEED = 2f;
-    private final static int ZOOM_IN_KEY = Input.Keys.Z;
-    private final static int ZOOM_OUT_KEY = Input.Keys.X;
-    private final static float MAX_ZOOM_IN = 0.2f;
-    private final static float MAX_ZOOM_OUT = 30f;
-
-    private final static int LOG_KEY = Input.Keys.ENTER;
-    private final static int RESET_KEY = Input.Keys.R;
-
     private final Vector2 position = new Vector2();
     private final Vector2 startPosition = new Vector2();
-    private float zoom = DEFAULT_ZOOM;
+    private final DebugCameraConfig config = new DebugCameraConfig();
+    private float zoom = config.getDefaultZoom();
 
     private void setZoom(float zoom) {
-        this.zoom = MathUtils.clamp(zoom, MAX_ZOOM_IN, MAX_ZOOM_OUT);
+        this.zoom = MathUtils.clamp(zoom, config.getMaxZoomIn(), config.getMaxZoomOut());
     }
 
     private void setPosition(float x, float y) {
@@ -58,7 +42,7 @@ public class DebugCameraController {
 
     private void reset() {
         setPosition(startPosition.x, startPosition.y);
-        zoom = DEFAULT_ZOOM;
+        zoom = config.getDefaultZoom();
     }
 
     private void log() {
@@ -70,27 +54,27 @@ public class DebugCameraController {
     }
 
     private void handleMovement(float delta) {
-        float moveSpeed = MOVE_SPEED * delta;
+        float moveSpeed = config.getMoveSpeed() * delta;
 
-        if (Gdx.input.isKeyPressed(UP_KEY)) {
+        if (config.isUpPressed()) {
             moveUp(moveSpeed);
-        } else if (Gdx.input.isKeyPressed(DOWN_KEY)) {
+        } else if (config.isDownPressed()) {
             moveDown(moveSpeed);
         }
 
-        if (Gdx.input.isKeyPressed(LEFT_KEY)) {
+        if (config.isLeftPressed()) {
             moveLeft(moveSpeed);
-        } else if (Gdx.input.isKeyPressed(RIGHT_KEY)) {
+        } else if (config.isRightPressed()) {
             moveRight(moveSpeed);
         }
     }
 
     private void handleZoom(float delta) {
-        float zoomSpeed = ZOOM_SPEED * delta;
+        float zoomSpeed = config.getZoomSpeed() * delta;
 
-        if (Gdx.input.isKeyPressed(ZOOM_IN_KEY)) {
+        if (config.isZoomInPressed()) {
             updateZoom(zoomSpeed);
-        } else if (Gdx.input.isKeyPressed(ZOOM_OUT_KEY)) {
+        } else if (config.isZoomOutPressed()) {
             updateZoom(-zoomSpeed);
         }
     }
@@ -107,7 +91,7 @@ public class DebugCameraController {
     }
 
     public void handleDebugInput() {
-        if (Gdx.input.isKeyPressed(RESET_KEY)) {
+        if (config.isResetPressed()) {
             reset();
             return;
         }
@@ -117,7 +101,7 @@ public class DebugCameraController {
         handleMovement(delta);
         handleZoom(delta);
 
-        if (Gdx.input.isKeyPressed(LOG_KEY)) {
+        if (config.isLogPressed()) {
             log();
         }
     }

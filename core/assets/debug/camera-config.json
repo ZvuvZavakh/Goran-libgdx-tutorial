@@ -1,0 +1,17 @@
+{
+  "MOVE_SPEED": "20f",
+  "UP_KEY": "W",
+  "DOWN_KEY": "S",
+  "LEFT_KEY": "A",
+  "RIGHT_KEY": "D",
+
+  "DEFAULT_ZOOM": "1f",
+  "ZOOM_SPEED": "2f",
+  "ZOOM_IN_KEY": "Z",
+  "ZOOM_OUT_KEY": "X",
+  "MAX_ZOOM_IN": "0.2f",
+  "MAX_ZOOM_OUT": "30f",
+
+  "LOG_KEY": "Enter",
+  "RESET_KEY": "R"
+}

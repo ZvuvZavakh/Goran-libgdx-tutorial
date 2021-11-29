@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import my.app.goran.tutorial.config.GameConfig;
 import my.app.goran.tutorial.entities.Player;
-import my.app.goran.tutorial.utils.DebugCameraController;
+import my.app.goran.tutorial.utils.debug.DebugCameraController;
 import my.app.goran.tutorial.utils.GraphicsUtils;
 
 public class GameScreen implements Screen {
