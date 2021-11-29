@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import my.app.goran.tutorial.config.GameConfig;
 import my.app.goran.tutorial.entities.Player;
+import my.app.goran.tutorial.utils.DebugCameraController;
 import my.app.goran.tutorial.utils.GraphicsUtils;
 
 public class GameScreen implements Screen {
@@ -15,6 +16,7 @@ public class GameScreen implements Screen {
     private Viewport viewport;
     private ShapeRenderer shapeRenderer;
     private Player player;
+    private DebugCameraController debugCameraController;
 
     @Override
     public void show() {
@@ -22,12 +24,17 @@ public class GameScreen implements Screen {
         viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera);
         shapeRenderer = new ShapeRenderer();
 
+        debugCameraController = new DebugCameraController();
+        debugCameraController.setStartPosition(GameConfig.WORLD_CENTER_X, GameConfig.WORLD_CENTER_Y);
+
         player = new Player();
-        player.setPosition(GameConfig.WORLD_WIDTH / 2f, 1f);
+        player.setPosition(GameConfig.WORLD_CENTER_X, 1f);
     }
 
     @Override
     public void render(float delta) {
+        debugCameraController.handleDebugInput();
+        debugCameraController.applyTo(camera);
         player.update();
 
         GraphicsUtils.clearScreen();
