@@ -24,6 +24,30 @@ public class GameScreen implements Screen {
     private float obstacleTimer = 0f;
     private final Array<Obstacle> obstacles = new Array<>();
 
+    private boolean isPlayerAlive = true;
+
+    private void update(float delta) {
+        player.update();
+        limitPlayerMovement();
+
+        updateObstacles();
+        createNewObstacle(delta);
+
+        if (isPlayerCollidingWithObstacle()) {
+            isPlayerAlive = false;
+        }
+    }
+
+    private boolean isPlayerCollidingWithObstacle() {
+        for (Obstacle obstacle: obstacles) {
+            if (obstacle.isCollidingWith(player)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void limitPlayerMovement() {
         float playerX = MathUtils.clamp(
                 player.getX(), Player.BOUNDS_RADIUS, GameConfig.WORLD_WIDTH - Player.BOUNDS_RADIUS
@@ -68,11 +92,9 @@ public class GameScreen implements Screen {
         debugCameraController.handleDebugInput();
         debugCameraController.applyTo(camera);
 
-        player.update();
-        limitPlayerMovement();
-
-        updateObstacles();
-        createNewObstacle(delta);
+        if (isPlayerAlive) {
+            update(delta);
+        }
 
         GraphicsUtils.clearScreen();
         shapeRenderer.setProjectionMatrix(camera.combined);

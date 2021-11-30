@@ -45,4 +45,8 @@ public abstract class BaseEntity {
         this.y = y;
         updateBounds();
     }
+
+    public Circle getBounds() {
+        return bounds;
+    }
 }
