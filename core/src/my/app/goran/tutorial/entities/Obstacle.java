@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Intersector;
 
 public class Obstacle extends BaseEntity {
 
+    private float ySpeed = 0.1f;
+    private boolean hit = false;
     public final static float BOUNDS_RADIUS = 0.3f;
 
     public Obstacle() {
@@ -11,10 +13,15 @@ public class Obstacle extends BaseEntity {
         bounds.setRadius(BOUNDS_RADIUS);
     }
 
-    private float ySpeed = 0.1f;
+    public boolean isHit() {
+        return hit;
+    }
 
     public boolean isCollidingWith(BaseEntity entity) {
-        return Intersector.overlaps(entity.getBounds(), bounds);
+        boolean overlaps = Intersector.overlaps(entity.getBounds(), bounds);
+        hit = overlaps;
+
+        return overlaps;
     }
 
     public void update() {
