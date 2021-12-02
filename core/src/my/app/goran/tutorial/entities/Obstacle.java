@@ -13,6 +13,10 @@ public class Obstacle extends BaseEntity {
         bounds.setRadius(BOUNDS_RADIUS);
     }
 
+    public void setYSpeed(float ySpeed) {
+        this.ySpeed = ySpeed;
+    }
+
     public boolean isHit() {
         return hit;
     }

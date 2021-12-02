@@ -29,6 +29,7 @@ public class GraphicsUtils {
     }
 
     public static void drawGrid(Viewport viewport, ShapeRenderer shapeRenderer) {
+        viewport.apply();
         drawGrid(viewport, shapeRenderer, 1);
     }
 

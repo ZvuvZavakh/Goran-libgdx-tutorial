@@ -12,6 +12,10 @@ public class GameConfig {
     public static final int PLAYER_START_LIVES = 3;
     public static final float SCORE_MAX_TIME = 1.25f;
 
+    public static final float EASY_OBSTACLE_SPEED = 0.1f;
+    public static final float MEDIUM_OBSTACLE_SPEED = 0.15f;
+    public static final float HARD_OBSTACLE_SPEED = 0.2f;
+
     public static final float HUD_WIDTH = 480f;
     public static final float HUD_HEIGHT = 800f;
 }
