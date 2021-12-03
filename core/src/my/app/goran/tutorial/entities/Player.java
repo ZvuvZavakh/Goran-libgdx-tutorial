@@ -9,6 +9,7 @@ import my.app.goran.tutorial.utils.GraphicsUtils;
 public class Player extends BaseEntity {
 
     public final static float BOUNDS_RADIUS = 0.4f;
+    public final static float SIZE = BOUNDS_RADIUS * 2f;
     private static final float MAX_X_SPEED = 0.2f;
 
     public Player() {

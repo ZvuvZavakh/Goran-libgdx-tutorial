@@ -2,6 +2,7 @@ package my.app.goran.tutorial.renderers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import my.app.goran.tutorial.assets.AssetsPaths;
 import my.app.goran.tutorial.config.GameConfig;
 import my.app.goran.tutorial.controllers.GameController;
+import my.app.goran.tutorial.entities.Obstacle;
+import my.app.goran.tutorial.entities.Player;
 import my.app.goran.tutorial.utils.GraphicsUtils;
 import my.app.goran.tutorial.utils.debug.DebugCameraController;
 
@@ -19,35 +22,25 @@ public class GameRenderer implements Disposable {
 
     private final GameController gameController;
 
-    private final OrthographicCamera camera;
-    private final OrthographicCamera uiCamera;
-    private final Viewport viewport;
-    private final Viewport uiViewport;
+    private final OrthographicCamera camera= new OrthographicCamera();
+    private final OrthographicCamera uiCamera= new OrthographicCamera();
+    private final Viewport viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera);
+    private final Viewport uiViewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT, uiCamera);
 
-    private final ShapeRenderer shapeRenderer;
-    private final DebugCameraController debugCameraController;
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private final DebugCameraController debugCameraController = new DebugCameraController();
 
-    private final SpriteBatch batch;
-    private final BitmapFont uiFont;
-    private final GlyphLayout layout;
+    private final SpriteBatch batch = new SpriteBatch();
+    private final BitmapFont uiFont = new BitmapFont(Gdx.files.internal(AssetsPaths.PRIMARY_FONT_PATH));
+    private final GlyphLayout layout = new GlyphLayout();
+
+    private final Texture playerTexture = new Texture(Gdx.files.internal(AssetsPaths.PLAYER_TEXTURE_PATH));
+    private final Texture obstacleTexture = new Texture(Gdx.files.internal(AssetsPaths.OBSTACLE_TEXTURE_PATH));
+    private final Texture backgroundTexture = new Texture(Gdx.files.internal(AssetsPaths.BACKGROUND_TEXTURE_PATH));
 
     public GameRenderer(GameController gameController) {
         this.gameController = gameController;
-
-        camera = new OrthographicCamera();
-        viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera);
-
-        uiCamera = new OrthographicCamera();
-        uiViewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT, uiCamera);
-
-        shapeRenderer = new ShapeRenderer();
-
-        debugCameraController = new DebugCameraController();
         debugCameraController.setStartPosition(GameConfig.WORLD_CENTER_X, GameConfig.WORLD_CENTER_Y);
-
-        batch = new SpriteBatch();
-        uiFont = new BitmapFont(Gdx.files.internal(AssetsPaths.PRIMARY_FONT));
-        layout = new GlyphLayout();
     }
 
     public void render() {
@@ -55,9 +48,25 @@ public class GameRenderer implements Disposable {
         debugCameraController.applyTo(camera);
 
         GraphicsUtils.clearScreen();
+
+        renderGameplay();
         renderDebug();
         renderUi();
+
         GraphicsUtils.drawGrid(viewport, shapeRenderer);
+    }
+
+    private void renderGameplay() {
+        viewport.apply();
+
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+
+        batch.draw(backgroundTexture, 0f, 0f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
+        gameController.getPlayer().draw(batch, playerTexture);
+        gameController.getObstacles().forEach(obstacle -> obstacle.draw(batch, obstacleTexture));
+
+        batch.end();
     }
 
     private void renderDebug() {

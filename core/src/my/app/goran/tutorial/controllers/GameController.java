@@ -2,6 +2,8 @@ package my.app.goran.tutorial.controllers;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pools;
 import my.app.goran.tutorial.config.DifficultyLevel;
 import my.app.goran.tutorial.config.GameConfig;
 import my.app.goran.tutorial.entities.Obstacle;
@@ -15,6 +17,7 @@ public class GameController {
 
     private float obstacleTimer = 0f;
     private final Array<Obstacle> obstacles = new Array<>();
+    private final Pool<Obstacle> obstaclePool = Pools.get(Obstacle.class, 20);
 
     private int lives = GameConfig.PLAYER_START_LIVES;
     private float scoreTimer = 0f;
@@ -25,6 +28,7 @@ public class GameController {
 
     public GameController() {
         player.setPosition(startPlayerX, startPlayerY);
+        player.setSize(Player.SIZE, Player.SIZE);
     }
 
     public void update(float delta) {
@@ -111,9 +115,10 @@ public class GameController {
             obstacleTimer = 0f;
 
             float obstacleX = MathUtils.random(Obstacle.BOUNDS_RADIUS, GameConfig.WORLD_WIDTH - Obstacle.BOUNDS_RADIUS);
-            Obstacle obstacle = new Obstacle();
+            Obstacle obstacle = obstaclePool.obtain();
 
             obstacle.setPosition(obstacleX, GameConfig.WORLD_HEIGHT);
+            obstacle.setSize(Obstacle.SIZE, Obstacle.SIZE);
             obstacle.setYSpeed(difficultyLevel.getSpeed());
             obstacles.add(obstacle);
         }
@@ -128,6 +133,8 @@ public class GameController {
         float minObstacleY = - Obstacle.BOUNDS_RADIUS * 2;
 
         if (obstacle.getY() < minObstacleY) {
+            obstacle.reset();
+            obstaclePool.free(obstacle);
             obstacles.removeValue(obstacle, true);
         }
     }
